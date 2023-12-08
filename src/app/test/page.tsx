@@ -12,11 +12,15 @@ interface Car {
 
 const getCars = async (): Promise<Car[]> => {
   const db = dbClient.db("cars");
-  const results = db.collection("voiture").find();
+  const results = db.collection<Car>("voiture").find();
   return (await results.toArray()).map((document) => {
-    const {} = document;
-    return{
-
+    const { name, make, color, km, year } = document;
+    return {
+      name,
+      make,
+      color,
+      km,
+      year
   }});
 }
  
@@ -25,7 +29,11 @@ export default async function Test() {
   return (
     <>
       <h1>hello Mongo</h1>
-      {data}
+      <ul>
+      {
+        data.map((car) => <li>{car.name} | {car.make} | {car.color} | {car.km} | {String(car.year)}</li>)
+      }
+      </ul>
     </>
   );
 };
